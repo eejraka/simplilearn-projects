@@ -32,7 +32,7 @@ public class Home implements References {
 	}
 	
 	public static void homeAbout(){
-		System.out.println("Virtual Key Repository App");
+		System.out.println("LockedMe.com");
 		System.out.println("Developed by Aayush Karjee");
 		return;
 	}
@@ -82,7 +82,18 @@ public class Home implements References {
 		sc.nextLine();
 		String k = sc.nextLine();
 		if(repo.contains(k)) {
-			System.out.println("SUCCESS: The repository contains that Key");
+			System.out.println("SUCCESS: The repository contains that Key. Opening the file now.");
+			try {
+				String pt = "C:\\Users\\cwc\\repos\\simplilearn-projects\\phase1\\virtualkeystorage\\src\\files\\"+k+".txt";
+				File op = new File(pt);
+				if(op.exists()) {
+					Process pro = Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler "+pt);
+					pro.waitFor();
+				}
+			}
+			catch(Exception e) {
+				System.out.println(e);
+			}
 		}
 		else {
 			System.out.println("ERROR: The repository does not contain that Key. Try again.");
@@ -95,74 +106,89 @@ public class Home implements References {
 			System.out.println("Additional Operations");
 			System.out.println("1. Add Key");
 			System.out.println("2. Delete Key");
-			System.out.println("3. Search for Key");
+			System.out.println("3. Search for and Open Key");
 			System.out.println("4. Return to Main Menu");
-			System.out.println("Select desired option by typing an integer: ");
-			try{
-				int next_choice = sc.nextInt();
-				switch(next_choice) {
-				case 1:
-					//add file
-					addKey();
-					break;
-				case 2:
-					//delete file
-					delKey();
-					break;
-				case 3:
-					//search file
-					srcKey();
-					break;
-				case 4:
-					return;
-				default:
-					System.out.println("Please make a valid selection.");
+			int next_choice = 0;
+			boolean done2 = false;
+			while(!done2) {
+				try{
+					System.out.println("Select desired option by typing an integer: ");
+					next_choice = sc.nextInt();
+					done2=true;
+				} catch (InputMismatchException e) {
+					sc.nextLine();
+					System.out.println("Invalid input. Please enter an integer as input.");
+					
 				}
-			} catch (InputMismatchException e) {
-				System.out.println("Invalid input. Goodbye!");
-				delAll();
-				System.exit(0);
+			}
+			switch(next_choice) {
+			case 1:
+				//add file
+				addKey();
+				break;
+			case 2:
+				//delete file
+				delKey();
+				break;
+			case 3:
+				//search file
+				srcKey();
+				break;
+			case 4:
+				return;
+			default:
+				System.out.println("Please make a valid selection.");
 			}
 			
 		}
 	}
 	
-	public static void main(String[] args) {		
-		homeAbout();
-		
+	public static void menu() {
 		while(true) {
 			System.out.println(" ");
 			System.out.println("Main Menu");
 			System.out.println("1. Display all Keys");
 			System.out.println("2. Additional Operations");
 			System.out.println("3. Exit Application");
-			System.out.println("Select desired option by typing an integer: ");
+			
 
-			try{
-				int choice = sc.nextInt();
-				switch(choice) {
-				case 1:
-					printEle();
-						break;
-						
-				case 2:
-					subMenu();
-					break;
-				case 3:
-					System.out.println("Goodbye!");
-					delAll();
-					System.exit(0);
-				default:
-					System.out.println("Please make a valid selection.");
+			int choice = 0;
+			boolean done = false;
+			while(!done) {
+				try{
+					System.out.println("Select desired option by typing an integer: ");
+					choice = sc.nextInt();
+					done = true;
+					
+				} catch (InputMismatchException e) {
+					sc.nextLine();
+					System.out.println("Invalid input. Please enter an integer as input.");
 				}
-			} catch (InputMismatchException e) {
-				System.out.println("Invalid input. Goodbye!");
+			}
+			
+			switch(choice) {
+			case 1:
+				printEle();
+					break;
+			case 2:
+				subMenu();
+				break;
+			case 3:
+				System.out.println("Goodbye!");
 				delAll();
 				System.exit(0);
+			default:
+				System.out.println("Please make a valid selection.");
 			}
-						
 		}
+	}
 	
+	public static void main(String[] args) {		
+		homeAbout();
+		
+		menu();
+		
+		return;
 	}
 
 }
